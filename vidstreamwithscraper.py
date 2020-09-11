@@ -84,6 +84,7 @@ while main_loop:
 
     while Second_loop_1:
         while Second_loop:
+            scrap_bool = True
 
             if file_check == False:
                 break
@@ -147,6 +148,7 @@ while main_loop:
             else:
                 open2 = f"{vids}{anime_name}{Anime_Episode}"
                 print(f"\nNo Episode Avaiable {Anime_Episode}")
+                scrap_bool = False
         #       webbrowser.open(open2)
         #       os.system(f"termux-open-url {open2}")
 
@@ -156,13 +158,14 @@ while main_loop:
 
             # print(f"webbrowser link: {my_url}")
 
-            my_request = Request(url=my_url, headers=headers)
-            html = urlopen(my_request)
-            my_iframe = BeautifulSoup(html.read(),"html5lib")
-            vidstreaming = "http:" + str(my_iframe.iframe["src"])
-            print(vidstreaming)
-            webbrowser.open(vidstreaming)
-            os.system(f"termux-open-url {vidstreaming}")
+            if scrap_bool:
+              my_request = Request(url=my_url, headers=headers)
+              html = urlopen(my_request)
+              my_iframe = BeautifulSoup(html.read(),"html5lib")
+              vidstreaming = "http:" + str(my_iframe.iframe["src"])
+              print(vidstreaming)
+              webbrowser.open(vidstreaming)
+              os.system(f"termux-open-url {vidstreaming}")
 
 
 
