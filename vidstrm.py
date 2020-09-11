@@ -27,11 +27,11 @@ while main_loop:
     anime = str(input('Enter Anime url: '))
 
     anime_name = anime.replace('https://vidstreaming.io/videos/', '')
-
+    
     print(anime_name)
     logicforlast = False
 
-    if anime.lower() == "exit":
+    if anime.lower() == "exit" or anime.lower() == "q":
         break
     if anime == '':
         break
@@ -44,15 +44,19 @@ while main_loop:
     if anime.lower() != "o":
         retry_url = True
         file_check = True
+        logicforlast = False
         
     print(retry_url)
 
     if (anime.lower() == "o" or anime.lower() == "last") and file_check and retry_url:
         open3 = os.popen("cat ./myAnime/Anime_Name-last").read()
         watched_ep = os.popen("cat ./myAnime/Anime_EP-last").read()
-
-        print(f"Opening {open3} Episode No: {watched_ep}")
-        print(f"{vids}{open3}{watched_ep}")
+        
+        annm = open3.replace('-',' ')
+        annm = annm.replace('episode','')
+        annm = annm.upper()
+        print(f"\nOpening {annm} \n Episode No: {watched_ep}")
+       # print(f"{vids}{open3}{watched_ep}")
 
         logicforlast = True
         anime_name = open3
@@ -64,6 +68,10 @@ while main_loop:
         os.system(f"termux-open-url {vids}{open3}{watched_ep}")
     # else:
         # print("loop o is not working")
+    annm = anime_name.replace('-',' ')
+    annm = annm.replace('episode','')
+    annm = annm.upper()
+    print(annm)
 
     while Second_loop_1:
         while Second_loop:
@@ -73,22 +81,24 @@ while main_loop:
             else:
                 retry_url = True
 
-            ep = str(input("Enter Episode number "))
-            Anime_Episode = ep
+            if logicforlast == False:
+                ep = str(input("\nEnter Episode number: "))
+                Anime_Episode = ep
 
             
 
-            while logicforlast:
+            while logicforlast == True:
                 Anime_Episode = watched_ep
                 new = int(watched_ep)
-                print(logicforlast)
+                # print(f"{logicforlast} logicforladt")
                 integerlogic = False
+                ep = ''
                 break
-
-            if ep.lower() == "exit":
+            logicforlast = False
+            if ep.lower() == "exit" or ep.lower() == "q":
                 break
             elif ep == '':
-                break
+                print("")
 
             elif ep.lower() == "n" or ep.lower() == "next":
 
@@ -98,7 +108,8 @@ while main_loop:
 
                 open2 = f"{vids}{anime_name}{Anime_Episode}"
 
-                print(f"Opening Episode No. {Anime_Episode} \n {open2}")
+               # print(f"Opening Episode No. {Anime_Episode} \n {open2}")
+                print(f"\nOpening {annm} \n Episode No. {Anime_Episode}")
 
                 os.system(
                     f"printf {anime_name} > ./myAnime/Anime_Name-last && printf {Anime_Episode} > ./myAnime/Anime_EP-last && touch ./myAnime/existed")
@@ -113,8 +124,8 @@ while main_loop:
             elif ep.isdigit():
                 
                 open2 = f"{vids}{anime_name}{Anime_Episode}"
-                print(f"Opening Episode No. {Anime_Episode} \n {open2} ")
-
+                #print(f"Opening Episode No. {Anime_Episode} \n {open2} ")
+                print(f"\nOpening {annm} \n Episode No. {Anime_Episode}")
                 new = int(Anime_Episode)
 
                 os.system(f"printf {anime_name} > ./myAnime/Anime_Name-last && printf {Anime_Episode} > ./myAnime/Anime_EP-last")
@@ -122,12 +133,12 @@ while main_loop:
                 logicforlast = False
                 # webbrowser.open(open2)
                 os.system(f"termux-open-url {open2}")
-
+            
             else:
                 open2 = f"{vids}{anime_name}{Anime_Episode}"
-                print(f"No Episode Avaiable {Anime_Episode}")
+                print(f"\nNo Episode Avaiable {Anime_Episode}")
         #       webbrowser.open(open2)
         #       os.system(f"termux-open-url {open2}")
-
+            logicforlast = False
             os.system(f'echo " \n {anime_name}{Anime_Episode}\n">./myAnime/{anime_name}{Anime_Episode}-ep && printf "$(date +"%m-%d-%y") Anime Name: {anime_name}"%s"\n" ./myAnime/*-ep > ./myAnime/savelist.txt')
         break
