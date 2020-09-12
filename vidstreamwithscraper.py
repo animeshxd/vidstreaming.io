@@ -158,16 +158,22 @@ while main_loop:
 
             # print(f"webbrowser link: {my_url}")
 
-            if scrap_bool:
+            while scrap_bool:
               my_request = Request(url=my_url, headers=headers)
               html = urlopen(my_request)
               my_iframe = BeautifulSoup(html.read(),"html5lib")
+              error = my_iframe.body.get_text()
+              if error == "404\n":
+                print("No Anime Available")
+                break
               vidstreaming = "http:" + str(my_iframe.iframe["src"])
               print(vidstreaming)
+              break
+
+              
+
+
               webbrowser.open(vidstreaming)
               os.system(f"termux-open-url {vidstreaming}")
-
-
-
             os.system(f'echo " \n {anime_name}{Anime_Episode}\n">./myAnime/{anime_name}{Anime_Episode}-ep && printf "$(date +"%m-%d-%y") Anime Name: {anime_name}"%s"\n" ./myAnime/*-ep > ./myAnime/savelist.txt')
         break
